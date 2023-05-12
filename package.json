@@ -1,0 +1,19 @@
+{
+  "name": "week-6-js-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jkessler5535/Week6-JS-Project.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jkessler5535/Week6-JS-Project/issues"
+  },
+  "homepage": "https://github.com/jkessler5535/Week6-JS-Project#readme"
+}
