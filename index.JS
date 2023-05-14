@@ -6,101 +6,120 @@
 //The game continues until all cards have been played.
 //The player with the most points at the end of the game wins.
 
-// Define class for Card.
 
-class Card{
-  constructor(suit,rank) {
-    this.suit = suit; //Spade,Heart,Diamond or club.
-    this.rank = rank; //2 to 14,Ace is 14, King is 13, Queen is 12, Jack is 11.
+
+class Card { //Define class for Card.
+  constructor(rank, suit) {
+    this.rank = rank;//2 to 14, Ace is 14, King is 13, Queen is 12, Jack is 11.
+    this.suit = suit;// Spade, Heart, Diamond or Club.
+  }
+}
+class Deck { //Define class for Deck.
+  constructor(){
+    this.cards = []; //Empty array that will hold cards.
+
+    const ranks = ["Ace", "2", "3","4", "5", "6", "7", "8", "9", "10", 
+    "Jack", "Queen", "King"]; // storing and declairing ranks.
+
+    const suits = ["Hearts", "Diamonds", "Clubs", "Spades"];//storing declairing suits.
+
+    ranks.forEach(rank => {
+      suits.forEach(suit => {
+        this.cards.push(new Card(rank, suit)); //Create a new card and add to deck.
+      });
+    });
+  }
+
+  shuffle(){ //Pick random index from 0 - i & swap cards.
+    for (let i = this.cards.length -1; i > 0; i--) { //iterate through cards
+      const j = Math.floor(Math.random()* (i + 1));
+      [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
+    }
+  }
+
+  dealCard(){ //declare deal card function
+    return this.cards.pop(); //remove and return the last card from deck.
   }
 }
 
-//Define a class for Deck.
+ class Player{ //define Player class
+  constructor(name){
+    this.name = name; //stating name; player 1/player 2
+    this.hand = []; // An array to hold players cards.
+    this.points = 0;//initialize the score to zero.
+  }
 
-class Deck{
+  playCard() {
+    return this.hand.pop();
+  }
+
+  addPoints(){ //Add the point to the players score.
+    this.points++;
+  }
+ }
+
+ class Game{ //declare Game class
   constructor(){
-    this.cards = []; //An array to hold all the cards.
-    const suits =["Spade", "Heart","Diamond", "Club"];
-      for (let suit of suits) {
-        for (let rank = 2; rank <= 14; rank++){
-          this.cards.push(new Card (suit,rank));//Create a new card and add to deck.
+    this.deck = new Deck();  //create deck
+    this.player1 = new Player("Player 1");//create two players. Player1
+    this.player2 = new Player("Player 2");//create player 2.
+  }
+
+  dealCards() {
+    this.deck.shuffle(); //create deck and shuffle.
+    for (let i = 0; i < 26; i++){ //iterate through cards
+      this.player1.hand.push(this.deck.dealCard());//Deal card to player 1
+      this.player2.hand.push(this.deck.dealCard());//Deal card to player 2
+    }
+  }
+
+  play(){
+    for (let i = 0; i < 26; i++){ //iterate through cards.
+      const card1 = this.player1.playCard(); //player1 turn, play card
+      const card2 = this.player2.playCard();//player 2 turn, play card
+
+
+      // concatinate to console which player played what rank/suit.
+      console.log(`${this.player1.name} played ${card1.rank} of ${card1.suit}.`);
+      console.log(`${this.player2.name} played ${card2.rank} of ${card2.suit}.`);
+
+
+
+      //Declare the score and declare winner. 
+
+        if(card1.rank === card2.rank) { //conditional statement comparing card.
+          console.log("It's a tie. No points awarded.");
+    }else if(card1.rank > card2.rank){ //if card1 is greater then card 2, add points
+      this.player1.addPoints(); //add points
+      console.log(`${this.player1.name} wins!`);//print to console if true
+    }else{
+      this.player2.addPoints();
+      console.log(`${this.player2.name} wins!`)//otherwise print this
+    }
+  }
+
+
+  //using template literals to concatinate string with results to console
+  console.log(`Final Score: ${this.player1.name}: ${this.player1.points},
+          ${this.player2.name}: ${this.player2.points}`);
+
+
+        //Conditional statement seeing who has higher points and declaring winner!
+        //if player one is greater print, "Player one wins!" otherwise "player 2 wins!"
+          if (this.player1.points === this.player2.points){
+            console.log("It's a tie!"); //print to console if card are tie
+          }else if (this.player1.points > this.player2.points) {
+            console.log(`${this.player1.name} wins!`);
+          }else{
+            console.log(`${this.player2.name} wins!`);
+          }
         }
       }
-   }
-
-   shuffle(){
-    for (let i = this.cards.length - 1; i > 0; i--){
-      const j = Math.floor(Math.random()* (i+1)); //Pick random index from 0-i
-      const temp = this.cards[i];  //swap the cards
-      this.cards[i] = this.cards[j];
-      this.cards[j] = temp;
-    }
-   }
-
-   deal() {
-    return this.cards.pop(); //remove and return the last card from deck
-   }
-}
-//Define a class for the player
-
-class Player {
-  constructor(name){
-    this.name = name;
-    this.score = 0; //initialize the score to zero.
-    this.hand = []; //An array to hold the players cards.
-  }
-
-  playCard(){
-    return this.hand.pop(); //Remove and return the last card in the players hand.
-  }
-
-  addScore(point){
-    this.score += point; //Add the point to the players score.
-  }
-}
-
-//create a deck and shuffle it
-
-const deck = new Deck();
-deck.shuffle();
-
-//create two players and deal half of the deck to each player
-
-const player1 = new Player ("Player 1");
-const player2 = new Player ("Player 2");
-  for (let i = 0; i < 26; i++){
-    player1.hand.push(deck.deal());
-    //Deal a card to player 1
-    player2.hand.push(deck.deal());
-    //Deal a card to player 2
-  }
-
-  //iterate through the turns where each player plays a card
-
-  while (player1.hand.length > 0 && player2.hand.length > 0){
-    const card1 = player1.playCard();
-    const card2 = player2.playCard();
-      if(card1.rank > card2.rank){
-        player1.addScore(1); //Player one wins the turn and gets a point
-      }else if (card1.rank < card2.rank){
-         player2.addScore(1); //Player two wins the turn and gets a point.
-      }
-   }
-
-   //Display the score and declare the winner
-
-   console.log(`${player1.name} has scored ${player1.score} points`);
-
-   console.log(`${player2.name} has scored ${player2.score} points`);
-
-   if (player1.score > player2.score){
-    console.log(`${player1.name} wins the game!`);
-   }else if (player1.score < player2.score){
-    console.log(`${player2.name} wins the game!`);
-   }else {
-    console.log("It's a tie!");
-   }
 
 
+      //functions called
+      const game = new Game();//storing game results
+      game.dealCards(); //activating card dealing
+      game.play(); //game will play
 
   
