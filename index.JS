@@ -34,6 +34,7 @@ class Deck { //Define class for Deck.
     for (let i = this.cards.length -1; i > 0; i--) { //iterate through cards
       const j = Math.floor(Math.random()* (i + 1));
       [this.cards[i], this.cards[j]] = [this.cards[j], this.cards[i]];
+      
     }
   }
 
@@ -49,7 +50,7 @@ class Deck { //Define class for Deck.
     this.points = 0;//initialize the score to zero.
   }
 
-  playCard() {
+  playCard() { //will play card
     return this.hand.pop();
   }
 
